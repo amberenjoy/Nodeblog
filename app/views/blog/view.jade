@@ -1,0 +1,58 @@
+extends layout
+
+block content
+    h2.page-header.post-view-header=post.title
+        div.post.post-view
+            div.post-meta
+                span.post-created 
+                    i.fa.fa-calendar &nbsp;
+                    时间: &nbsp;
+                    = moment(post.created).format('YYYY-MM-DD')
+                span.post-author 
+                    i.fa.fa-user &nbsp;
+                    作者: &nbsp;
+                    = post.author.name
+                span.post-category 
+                    i.fa.fa-list-ul &nbsp;
+                    分类: &nbsp;
+                    a(href="/posts/category/"+post.category.name,target="_blank")
+                        =post.category.name
+                span.post-comment 
+                    i.fa.fa-comment&nbsp;
+                    评论: &nbsp;
+                    =post.comments.length || 0
+                span.post-favourite
+                    a(href="/posts/favourite/" + post._id)
+                        i.fa.fa-heart
+                        &nbsp;
+                        = post.meta.favourite || 0
+            
+            div.post-content
+                !=post.content
+            
+            div.post-comments
+                div.panel.panel-info
+                    div.panel-heading 用户评论
+                    if post.comments.length
+                        each comment in post.comments
+                            div.panel-body.post-comment-item
+                                p.post-comment-email=comment.email
+                                    small.pull-right=moment(comment.created).format('YYYY-MM-DD')
+                                p.post-comment.content=comment.content
+                    else
+                        p.alert 还没有评论
+
+                div.panel.panel-danger
+                    div.panel-heading 添加评论
+                    div.panel-body
+                        form.post-comment-form(action="/posts/comment/"+post._id, method="post", enctype="application/x-www-form-urlencoded")
+                            div.form-group
+                                label(for="email") 邮箱
+                                input.form-control(type="text",name="email",placeholder="email")
+                            div.form-group
+                                label(for="content") 内容
+                                textarea.form-control(type="text",name="content",placeholder="content")
+                            button.btn.btn-primary submit
+
+block scripts
+    script $(document).ready(function () { console.log('dom ready'); });
