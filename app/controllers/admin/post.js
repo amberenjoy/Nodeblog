@@ -2,7 +2,7 @@
 * @Author: amber
 * @Date:   2017-02-24 10:09:05
 * @Last Modified by:   amber
-* @Last Modified time: 2017-02-28 15:04:57
+* @Last Modified time: 2017-02-28 16:26:50
 */
 
 'use strict';
@@ -80,7 +80,11 @@ router.get('/', function (req, res, next) {
 
 router.get('/add', function (req, res, next) {
     res.render('admin/post/add', {
+        action:"/admin/posts/add",
         pretty: true,
+        post:{
+            category:{_id:''}
+        },
     });
 });
 
@@ -104,6 +108,7 @@ router.post('/add',function(req,res,next){
     var title=req.body.title.trim();
     var category=req.body.category.trim();
     var content=req.body.content;
+    
     User.findOne({},function(err,author){
         var py=pinyin(title,{
         style:pinyin.STYLE_NORMAL,
@@ -137,12 +142,44 @@ router.post('/add',function(req,res,next){
     })
 });
 
-router.get('/edit/:id',function(req,res,next){
-
+router.get('/edit/:id', getPostById, function(req,res,next){
+    res.render('admin/post/add', {
+        action:"/admin/posts/edit/"+req.post._id,
+        post: req.post,            
+    });
 });
-router.post('/edit/:id',function(req,res,next){
 
+router.post('/edit/:id', getPostById, function(req,res,next){
+
+    var post=req.post;
+        //res.jsonp(req.body);
+    var title=req.body.title.trim();
+    var category=req.body.category.trim();
+    var content=req.body.content;
+
+    var py=pinyin(title,{
+        style:pinyin.STYLE_NORMAL,
+        heteronym:false
+    }).map(function(item){
+        return item[0];
+    }).join(' ');
+
+    post.title=title;
+    post.category=category;
+    post.content=content;
+    post.slug=slug(py);
+
+    post.save(function(err,post){
+        if(err){
+            req.flash('error','文章编辑失败');
+            res.redirect('/admin/posts/edit/'+post._id);
+        }else{
+            req.flash('info','文章编辑成功');
+            res.redirect('/admin/posts');
+        }
+    });
 });
+
 router.get('/delete/:id',function(req,res,next){
     if(!req.params.id){
         return next(new Error('no post id provided'));
@@ -161,3 +198,24 @@ router.get('/delete/:id',function(req,res,next){
         res.redirect('/admin/posts');
     });
 });
+
+
+function getPostById(req,res,next){
+    if(!req.params.id){
+        return next(new Error('no post id provided'));
+    }
+    Post.findOne({_id: req.params.id})
+        .populate('category')
+        .populate('author')
+        .exec(function(err,post){
+            if(err){
+                return next(err);
+            }
+            if(!post){
+                return next(new Error('post not found: ', req.params.id));
+            }
+
+            req.post=post;
+            next();
+        })
+}
