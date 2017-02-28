@@ -2,12 +2,13 @@
 * @Author: amber
 * @Date:   2017-02-24 10:09:05
 * @Last Modified by:   amber
-* @Last Modified time: 2017-02-27 12:26:17
+* @Last Modified time: 2017-02-28 15:04:57
 */
 
 'use strict';
 var express = require('express'),
     slug=require('slug'),
+    pinyin=require('pinyin'),
     router = express.Router(),
     mongoose = require('mongoose'),
     Post = mongoose.model('Post'),
@@ -84,15 +85,37 @@ router.get('/add', function (req, res, next) {
 });
 
 router.post('/add',function(req,res,next){
+
+    req.checkBody('title','文章标题不能为空').notEmpty();
+    req.checkBody('category','文章分类不能为空').notEmpty();
+    req.checkBody('content','文章内容不能为空').notEmpty();
+
+    var errors=req.validationErrors();
+    if(errors){
+        console.log(errors);
+        return res.render('admin/post/add',{
+            errors:errors,
+            title:req.body.title,
+            content:req.body.content,
+        });
+    }
+
     //res.jsonp(req.body);
     var title=req.body.title.trim();
     var category=req.body.category.trim();
     var content=req.body.content;
     User.findOne({},function(err,author){
+        var py=pinyin(title,{
+        style:pinyin.STYLE_NORMAL,
+        heteronym:false
+        }).map(function(item){
+            return item[0];
+        }).join(' ');
+
         if(err) return next(err);
         var post=new Post({
             title:title,
-            slug:slug(title),
+            slug:slug(py),
             category:category,
             content:content,
             author:author,

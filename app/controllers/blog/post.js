@@ -2,7 +2,7 @@
 * @Author: amber
 * @Date:   2017-02-23 10:26:06
 * @Last Modified by:   amber
-* @Last Modified time: 2017-02-23 17:25:46
+* @Last Modified time: 2017-02-28 15:07:27
 */
 
 'use strict';
@@ -18,7 +18,7 @@ module.exports = function (app) {
 
 router.get('/', function (req, res, next) {
     Post.find({published:true})
-            .sort('created')
+            .sort('-created')
             .populate('author')
             .populate('category')
             .exec(function (err, posts) {
