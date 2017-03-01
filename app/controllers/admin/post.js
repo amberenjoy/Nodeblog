@@ -2,7 +2,7 @@
 * @Author: amber
 * @Date:   2017-02-24 10:09:05
 * @Last Modified by:   amber
-* @Last Modified time: 2017-02-28 16:26:50
+* @Last Modified time: 2017-03-01 15:48:26
 */
 
 'use strict';
@@ -40,6 +40,10 @@ router.get('/', function (req, res, next) {
     if(req.query.author){
         conditions.author=req.query.author.trim();
     }
+    if(req.query.keyword){
+        conditions.title=new RegExp(req.query.keyword.trim(),'i');
+        conditions.content=new RegExp(req.query.keyword.trim(),'i');
+    }
 
     User.find({},function(err,authors){
         if(err) return next(err);
@@ -70,7 +74,9 @@ router.get('/', function (req, res, next) {
                     pretty: true,
                     filter:{
                         category:req.query.category||"",
-                        author:req.query.author||""
+                        author:req.query.author||"",
+                        keyword:req.query.keyword||""
+
                     }
                 });
             });

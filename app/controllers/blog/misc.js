@@ -2,7 +2,7 @@
 * @Author: amber
 * @Date:   2017-02-23 10:25:12
 * @Last Modified by:   amber
-* @Last Modified time: 2017-02-23 10:30:03
+* @Last Modified time: 2017-03-01 15:30:05
 */
 
 'use strict';
@@ -18,14 +18,14 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/about', function (req, res, next) {
-    res.render('blog/index', {
+    res.render('blog/about', {
         title: 'About me',
         pretty: true,
     });
 });
 
 router.get('/contact', function (req, res, next) {
-    res.render('blog/index', {
+    res.render('blog/contact', {
         title: 'Contact me',
         pretty: true,
     });

@@ -2,7 +2,7 @@
 * @Author: amber
 * @Date:   2017-02-23 10:26:06
 * @Last Modified by:   amber
-* @Last Modified time: 2017-02-28 15:07:27
+* @Last Modified time: 2017-03-01 15:27:07
 */
 
 'use strict';
@@ -17,7 +17,13 @@ module.exports = function (app) {
 };
 
 router.get('/', function (req, res, next) {
-    Post.find({published:true})
+    var conditions={published:true};
+    if(req.query.keyword){
+        conditions.title=new RegExp(req.query.keyword.trim(),'i');
+        conditions.content=new RegExp(req.query.keyword.trim(),'i');
+    }
+
+    Post.find(conditions)
             .sort('-created')
             .populate('author')
             .populate('category')

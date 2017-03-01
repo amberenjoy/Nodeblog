@@ -9,7 +9,7 @@ block main
         .blog-masthead
             .container
                 nav.blog-nav
-                    if pageName === '/'
+                    if pageName === '/posts'
                         a.blog-nav-item.active(href="/")  首页
                     else
                         a.blog-nav-item(href="/")  首页
@@ -23,6 +23,9 @@ block main
                         a.blog-nav-item.active(href="/contact") 联系
                     else
                         a.blog-nav-item(href="/contact") 联系
+                
+                    form.navbar-form.pull-right(method='get',action='/posts/')
+                        input.form-control(type="text", name="keyword", placeholder="search......")
 
     .container
         .row
@@ -55,3 +58,9 @@ block main
             p NodeBlog by Amber
             p
                 a(href="#") Back to top
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                a(href="/admin/users/login") 登录
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                a(href="/admin/users/register") 注册
+                
+
