@@ -14,7 +14,6 @@
 5. 注册功能（前端密码加密， **md5**），登录功能 <del> `（未完成）`</del>, <br/>
      使用passport:<br/>
        `passportjs是一个提供authentication服务的node中间件。通常用于expressjs web application的验证。passportjs提供了很多的strategies，每一个strategy是对一种验证方式的封装。比如passport-local，常规的使用本地验证，一般用户信息存在数据库中。`
-     <br/>
      实现登录验证，添加session会话配置<br/>
      添加中间件，实现用户权限管理
 
