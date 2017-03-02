@@ -2,7 +2,7 @@
 * @Author: amber
 * @Date:   2017-02-24 16:30:11
 * @Last Modified by:   amber
-* @Last Modified time: 2017-03-01 15:05:24
+* @Last Modified time: 2017-03-02 14:31:50
 */
 
 'use strict';
@@ -12,19 +12,20 @@ var express = require('express'),
     Post = mongoose.model('Post'),
     slug=require('slug'),
     pinyin=require('pinyin'),
+    auth=require('./user'),
     Category=mongoose.model('Category');
 
 module.exports = function (app) {
     app.use('/admin/categories', router);
 };
 
-router.get('/', function (req, res, next) {
+router.get('/', auth.requireLogin,function (req, res, next) {
     res.render('admin/category/index', {
         pretty: true,
     });
 });
 
-router.get('/add', function (req, res, next) {
+router.get('/add', auth.requireLogin, function (req, res, next) {
     res.render('admin/category/add', {
         pretty: true,
         action:"/admin/categories/add",
@@ -32,7 +33,7 @@ router.get('/add', function (req, res, next) {
     });
 });
 
-router.post('/add',function(req,res,next){
+router.post('/add',auth.requireLogin, function(req,res,next){
     req.checkBody('name','文章标题不能为空').notEmpty();
 
     var errors=req.validationErrors();
@@ -69,13 +70,13 @@ router.post('/add',function(req,res,next){
         }
     })
 });
-router.get('/edit/:id',getCategoryById, function(req,res,next){
+router.get('/edit/:id',auth.requireLogin, getCategoryById, function(req,res,next){
     res.render('admin/category/add', {
         action:"/admin/categories/edit/"+req.category._id,
         category: req.category,            
     });
 });
-router.post('/edit/:id',getCategoryById,function(req,res,next){
+router.post('/edit/:id', auth.requireLogin, getCategoryById,function(req,res,next){
     var category=req.category;
     var name=req.body.name.trim();
     var py=pinyin(name,{
@@ -98,7 +99,7 @@ router.post('/edit/:id',getCategoryById,function(req,res,next){
         }
     });
 });
-router.get('/delete/:id',function(req,res,next){
+router.get('/delete/:id', auth.requireLogin, function(req,res,next){
      if(!req.params.id){
         return next(new Error('no category id provided'));
     }

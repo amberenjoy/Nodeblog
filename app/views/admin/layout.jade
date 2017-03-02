@@ -17,11 +17,13 @@ block main
                     a.navbar-brand(href="/") Node博客系统
                 #navbar.navbar-collapse.collapse
                     ul.nav.navbar-nav.navbar-right
-                     
-                        li
-                            a(href="/admin/users/logout") 
-                                i.fa.fa-unlock
-                                | &nbsp;注销
+                        if user
+                            li
+                                a=user.email
+                            li
+                                a(href="/admin/users/logout") 
+                                    i.fa.fa-unlock
+                                    | &nbsp;注销
                         li
                             a(href="#") 
                                 i.fa.fa-question

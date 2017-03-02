@@ -5,7 +5,9 @@ block content
     .container
         .wrapper
             form.form-signin(method="post",action="/admin/users/login")
+                != messages()
                 h3.form-signin-heading Welcome! 请登录
+
                 hr.colorgraph
                 br
                 input.email.form-control(type='text', name='email', placeholder='Email', required='true')

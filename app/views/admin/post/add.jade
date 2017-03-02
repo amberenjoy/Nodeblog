@@ -19,12 +19,13 @@ block content
                 option(value="",selected=true) -选择分类-
                 each category in categories
                     option(value=category._id,selected=(category._id.toString()===post.category._id.toString()))=category.name
-
+        
         div.form-group
             label(for="content") 内容
             textarea#js-post-content.form-control(name="content", required="true")=post.content
 
         button.btn.btn.lg.btn-info(type="submit")=post._id? "保存修改": "提交文章"
+        h3.pull-right
 
     
 block scripts

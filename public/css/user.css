@@ -2,7 +2,7 @@
 * @Author: amber
 * @Date:   2017-03-01 15:47:50
 * @Last Modified by:   amber
-* @Last Modified time: 2017-03-01 16:26:13
+* @Last Modified time: 2017-03-02 15:25:53
 */
 .wrapper {    
     margin-top: 80px;
@@ -41,6 +41,14 @@ input[type="password"] {
     border-top-right-radius: 0;
 }
 
+#messages .error{
+    padding: 0;
+    margin: 0;
+    color: red;
+    font-weight: bold;
+    text-align:center;
+    list-style: none;
+}
 .colorgraph {
     height: 7px;
     border-top: 0;
